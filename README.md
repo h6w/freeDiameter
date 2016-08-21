@@ -18,7 +18,7 @@ USAGE
 
 This can be used out-of-the-box simply by calling:
 
-    docker run -d -p 3868:3868 -p 5658:5658 freeDiameter
+    docker run -d -p 3868:3868 -p 5658:5658 tudorh/freeDiameter
 
 This will run a version with a generated self-signed CA and key. (Insecure)
 
@@ -27,15 +27,15 @@ To use it properly, either:
 1) Specify the parameters on the command line:
 either directly:
 
-    docker run -d -e PARAM=VALUE freeDiameter
+    docker run -d -e PARAM=VALUE tudorh/freeDiameter
 
 or via an environment file:
 
-    docker run -d --env-file mysettings freeDiameter
+    docker run -d --env-file mysettings tudorh/freeDiameter
 
 2) Specify a configuration folder:
 
-    docker run -d -v /srv/freeDiameter/config:/etc/freeDiameter freeDiameter
+    docker run -d -v /srv/freeDiameter/config:/etc/freeDiameter tudorh/freeDiameter
 
 CONFIGURATION
 =============
