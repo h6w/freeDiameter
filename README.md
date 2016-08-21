@@ -1,7 +1,8 @@
 # freediameter-docker
 A docker instance of freeDiameter
 
-(c) 2016 Smart Guide under an MIT License
+freeDiameter is released under a BSD license
+These associated scripts are (c) 2016 Smart Guide and released under an MIT License
 
 This is my first (public) Docker Hub contribution, so please be nice. :-)
 
