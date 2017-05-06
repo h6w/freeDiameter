@@ -29,15 +29,15 @@ To use it properly, either:
 1) Specify the parameters on the command line:
 either directly:
 
-    docker run -d -e PARAM=VALUE tudorh/freeDiameter
+    docker run -d -e PARAM=VALUE tudorh/freediameter
 
 or via an environment file:
 
-    docker run -d --env-file mysettings tudorh/freeDiameter
+    docker run -d --env-file mysettings tudorh/freediameter
 
 2) Specify a configuration folder:
 
-    docker run -d -v /srv/freeDiameter/config:/etc/freeDiameter tudorh/freeDiameter
+    docker run -d -v /srv/freeDiameter/config:/etc/freediameter tudorh/freediameter
 
 CONFIGURATION
 =============
