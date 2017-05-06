@@ -27,6 +27,7 @@ This will run a version with a generated self-signed CA and key. (Insecure)
 To use it properly, either:
 
 1) Specify the parameters on the command line:
+
 either directly:
 
     docker run -d -e PARAM=VALUE tudorh/freediameter
