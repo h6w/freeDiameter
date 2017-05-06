@@ -20,7 +20,7 @@ USAGE
 
 This can be used out-of-the-box simply by calling:
 
-    docker run -d -p 3868:3868 -p 5658:5658 tudorh/freeDiameter
+    docker run -d -p 3868:3868 -p 5658:5658 tudorh/freediameter
 
 This will run a version with a generated self-signed CA and key. (Insecure)
 
