@@ -39,7 +39,7 @@ or via an environment file:
 2) Specify a configuration folder:
 
 
-    docker run -d -v /srv/freeDiameter/config:/etc/freediameter tudorh/freediameter
+    docker run -d -v /srv/freeDiameter/config:/etc/freeDiameter tudorh/freediameter
 
 
 CONFIGURATION
