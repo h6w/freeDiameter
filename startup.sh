@@ -31,5 +31,16 @@ if [ ! -f /etc/freeDiameter/freeDiameter.conf ]; then
             --outfile certs/freeDiameter.pem )
 fi
 
+if [ -f /etc/freeDiameter/freeDiameter.conf.customization ]; then
+  cat /etc/freeDiameter/freeDiameter.conf.customization >> /etc/freeDiameter/freeDiameter.conf
+fi
+
+if [ -f /etc/freeDiameter/hosts.customization ]; then
+  cat /etc/freeDiameter/hosts.customization >> /etc/hosts
+fi
+
+# in some cases we must wait e.g. for other peers
+[  -z "$DELAY_ENABLED" ] || sleep 10
+
 #RUN!!
 /usr/bin/freeDiameterd
