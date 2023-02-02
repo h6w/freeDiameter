@@ -43,4 +43,4 @@ fi
 [  -z "$DELAY_ENABLED" ] || sleep 10
 
 #RUN!!
-/usr/bin/freeDiameterd
+exec /usr/bin/freeDiameterd
