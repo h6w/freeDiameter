@@ -1,5 +1,5 @@
-FROM alpine
-MAINTAINER Tudor Holton <development@tudorholton.com>
+FROM alpine:3.21.3
+LABEL org.opencontainers.image.authors="Tudor Holton <development@tudorholton.com>"
 RUN apk update \
  && apk add build-base cmake wget tar gzip file linux-headers bison flex glib libgcrypt glib-dev libidn-dev gnutls-dev libgcrypt-dev gnutls libidn gnutls-utils ca-certificates \
  && wget -O libsctp.tar.gz http://downloads.sourceforge.net/project/lksctp/lksctp-tools/lksctp-tools-1.0.17.tar.gz \
@@ -11,7 +11,7 @@ RUN apk update \
  && make install \
  && cd - \
  && rm -R libsctp.tar.gz build-libsctp \
- && wget -O freediameter.tar.gz http://www.freediameter.net/hg/freeDiameter/archive/1.2.0.tar.gz \
+ && wget -O freediameter.tar.gz https://github.com/freeDiameter/freeDiameter/archive/refs/tags/1.5.0.tar.gz \
  && mkdir build-freediameter \
  && cd build-freediameter \
  && tar xzvf ../freediameter.tar.gz --strip-components=1 \
