@@ -9,7 +9,7 @@ This is my first (public) Docker Hub contribution, so please be nice. :-)
 
 Basically, this is a Docker instance of the freeDiameter server at:
 
-http://www.freediameter.net/
+https://github.com/freeDiameter/freeDiameter
 
 Based on Alpine Linux (of course!)
 
