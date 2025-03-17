@@ -47,103 +47,116 @@ CONFIGURATION
 (Lovingly copied from freediameter.conf.sample)
 
     # This is a sample configuration file for freeDiameter daemon.
-
+    
     # Most of the options can be omitted, as they default to reasonable values.
     # Only TLS-related options must be configured properly in usual setups.
-
+    
     # It is possible to use "include" keyword to import additional files
     # e.g.: include "/etc/freeDiameter.d/*.conf"
-    # This is exactly equivalent as copy & paste the content of the included file(s) 
+    # This is exactly equivalent as copy & paste the content of the included file(s)
     # where the "include" keyword is found.
-
-
+    
+    
     ##############################################################
-    ##  Peer identity and realm 
-
+    ##  Peer identity and realm
+    
     # The Diameter Identity of this daemon.
     # This must be a valid FQDN that resolves to the local host.
     # Default: hostname's FQDN
     #Identity = "aaa.koganei.freediameter.net";
-
+    
     # The Diameter Realm of this daemon.
     # Default: the domain part of Identity (after the first dot).
     #Realm = "koganei.freediameter.net";
-
+    
     ##############################################################
     ##  Transport protocol configuration
-
+    
     # The port this peer is listening on for incoming connections (TCP and SCTP).
     # Default: 3868. Use 0 to disable.
     #Port = 3868;
-
+    
     # The port this peer is listening on for incoming TLS-protected connections (TCP and SCTP).
     # See TLS_old_method for more information about TLS flavours.
     # Note: we use TLS/SCTP instead of DTLS/SCTP at the moment. This will change in future version of freeDiameter.
     # Default: 5868. Use 0 to disable.
     #SecPort = 5868;
-
-    # Use RFC3588 method for TLS protection, where TLS is negociated after CER/CEA exchange is completed 
-    # on the unsecure connection. The alternative is RFC6733 mechanism, where TLS protects also the 
+    
+    # Use RFC3588 method for TLS protection, where TLS is negotiated after CER/CEA exchange is completed
+    # on the insecure connection. The alternative is RFC6733 mechanism, where TLS protects also the
     # CER/CEA exchange on a dedicated secure port.
-    # This parameter only affects outgoing connections. 
+    # This parameter only affects outgoing connections.
     # The setting can be also defined per-peer (see Peers configuration section).
     # Default: use RFC6733 method with separate port for TLS.
     #TLS_old_method;
-
+    
     # Disable use of TCP protocol (only listen and connect over SCTP)
     # Default : TCP enabled
     #No_TCP;
-
+    
     # Disable use of SCTP protocol (only listen and connect over TCP)
     # Default : SCTP enabled
     #No_SCTP;
     # This option is ignored if freeDiameter is compiled with DISABLE_SCTP option.
-
+    
     # Prefer TCP instead of SCTP for establishing new connections.
-    # This setting may be overwritten per peer in peer configuration blocs.
+    # This setting may be overwritten per peer in peer configuration blocks.
     # Default : SCTP is attempted first.
     #Prefer_TCP;
-
+    
     # Default number of streams per SCTP associations.
     # This setting may be overwritten per peer basis.
     # Default : 30 streams
     #SCTP_streams = 30;
-
+    
     ##############################################################
     ##  Endpoint configuration
-
+    
     # Disable use of IP addresses (only IPv6)
     # Default : IP enabled
     #No_IP;
-
+    
     # Disable use of IPv6 addresses (only IP)
     # Default : IPv6 enabled
     #No_IPv6;
-
+    
     # Specify local addresses the server must bind to
     # Default : listen on all addresses available.
     #ListenOn = "202.249.37.5";
     #ListenOn = "2001:200:903:2::202:1";
     #ListenOn = "fe80::21c:5ff:fe98:7d62%eth0";
-
-
+    
+    
     ##############################################################
     ##  Server configuration
-
+    
     # How many Diameter peers are allowed to be connecting at the same time ?
     # This parameter limits the number of incoming connections from the time
     # the connection is accepted until the first CER is received.
-    # Default: 5 unidentified clients in paralel.
+    # Default: 5 unidentified clients in parallel.
     #ThreadsPerServer = 5;
-
+    
+    # If this host is used as relay or proxy, it can be useful to limit
+    # connections from "outside" until enough processing nodes are available.
+    # This parameter defines a regex pattern for recognizing such nodes;
+    # Default: NO DEFAULT
+    #ProcessingPeersPattern = "worker[0-9]*.example.com";
+    
+    # This next parameter defines how many of these processing peers
+    # must be connected before CERs from other hosts are accepted.
+    # If this is set, ProcessingPeersPattern must also be defined.
+    # If unset or less than 1, ProcessingPeersPattern and this variable do nothing.
+    # Default: 0
+    #ProcessingPeersMinimum = 0;
+    
     ##############################################################
     ##  TLS Configuration
-
+    
     # TLS is managed by the GNUTLS library in the freeDiameter daemon.
     # You may find more information about parameters and special behaviors
     # in the relevant documentation.
     # http://www.gnu.org/software/gnutls/manual/
-
+    
     # Credentials of the local peer
     # The X509 certificate and private key file to use for the local peer.
     # The files must contain PKCS-1 encoded RSA key, in PEM format.
@@ -151,88 +164,111 @@ CONFIGURATION
     # Default : NO DEFAULT
     #TLS_Cred = "<x509 certif file.PEM>" , "<x509 private key file.PEM>";
     TLS_Cred = "/etc/ssl/certs/freeDiameter.pem", "/etc/ssl/private/freeDiameter.key";
-
+    
     # Certificate authority / trust anchors
     # The file containing the list of trusted Certificate Authorities (PEM list)
     # (This parameter is passed to gnutls_certificate_set_x509_trust_file function)
     # The directive can appear several times to specify several files.
     # Default : GNUTLS default behavior
     #TLS_CA = "<file.PEM>";
-
+    
     # Certificate Revocation List file
     # The information about revoked certificates.
-    # The file contains a list of trusted CRLs in PEM format. They should have been verified before. 
+    # The file contains a list of trusted CRLs in PEM format. They should have been verified before.
     # (This parameter is passed to gnutls_certificate_set_x509_crl_file function)
     # Note: openssl CRL format might have interoperability issue with GNUTLS format.
     # Default : GNUTLS default behavior
     #TLS_CRL = "<file.PEM>";
-
+    
     # GNU TLS Priority string
-    # This string allows to configure the behavior of GNUTLS key exchanges 
+    # This string allows to configure the behavior of GNUTLS key exchanges
     # algorithms. See gnutls_priority_init function documentation for information.
     # You should also refer to the Diameter required TLS support here:
     #   http://tools.ietf.org/html/rfc6733#section-13.1
     # Default : "NORMAL"
     # Example: TLS_Prio = "NONE:+VERS-TLS1.1:+AES-128-CBC:+RSA:+SHA1:+COMP-NULL";
     #TLS_Prio = "NORMAL";
-
+    
     # Diffie-Hellman parameters size
     # Set the number of bits for generated DH parameters
     # Valid value should be 768, 1024, 2048, 3072 or 4096.
-    # (This parameter is passed to gnutls_dh_params_generate2 function, 
+    # (This parameter is passed to gnutls_dh_params_generate2 function,
     # it usually should match RSA key size)
     # Default : 1024
     #TLS_DH_Bits = 1024;
-
+    
     # Alternatively, you can specify a file to load the PKCS#3 encoded
-    # DH parameters directly from. This accelerates the daemon start 
+    # DH parameters directly from. This accelerates the daemon start
     # but is slightly less secure. If this file is provided, the
     # TLS_DH_Bits parameters has no effect.
     # Default : no default.
     #TLS_DH_File = "<file.PEM>";
-
-
+    
+    
     ##############################################################
     ##  Timers configuration
-
+    
     # The Tc timer of this peer.
     # It is the delay before a new attempt is made to reconnect a disconnected peer.
     # The value is expressed in seconds. The recommended value is 30 seconds.
     # Default: 30
     #TcTimer = 30;
-
+    
     # The Tw timer of this peer.
     # It is the delay before a watchdog message is sent, as described in RFC 3539.
     # The value is expressed in seconds. The default value is 30 seconds. Value must
     # be greater or equal to 6 seconds. See details in the RFC.
     # Default: 30
     #TwTimer = 30;
-
+    
     ##############################################################
     ##  Applications configuration
-
+    
     # Disable the relaying of Diameter messages?
     # For messages not handled locally, the default behavior is to forward the
-    # message to another peer if any is available, according to the routing 
-    # algorithms. In addition the "0xffffff" application is advertised in CER/CEA 
+    # message to another peer if any is available, according to the routing
+    # algorithms. In addition the "0xffffff" application is advertised in CER/CEA
     # exchanges.
     # Default: Relaying is enabled.
     #NoRelay;
-
+    
     # Number of server threads that can handle incoming messages at the same time.
     # Default: 4
     #AppServThreads = 4;
-
+    
+    # Number of server threads that can handle incoming message routing at the same time.
+    # Default: 1
+    #RoutingInThreads = 1;
+    
+    # Number of server threads that can handle outgoing message routing at the same time.
+    # Default: 1
+    #RoutingOutThreads= 1;
+    
+    # Maximum size of the incoming queue (messages queued after accepting
+    # them from the network) before blocking
+    # Default: 20
+    #IncomingQueueLimit = 20;
+    
+    # Maximum size of the outgoing queue (messages queued for sending to
+    # the network) before blocking
+    # Default: 30
+    #OutgoingQueueLimit = 30;
+    
+    # Maximum size of the local queue (messages queued for local handling)
+    # before blocking
+    # Default: 25
+    #LocalQueueLimit = 25;
+    
     # Other applications are configured by loaded extensions.
-
+    
     ##############################################################
     ##  Extensions configuration
-
+    
     #  The freeDiameter framework merely provides support for
     # Diameter Base Protocol. The specific application behaviors,
     # as well as advanced functions, are provided
     # by loadable extensions (plug-ins).
-    #  These extensions may in addition receive the name of a 
+    #  These extensions may in addition receive the name of a
     # configuration file, the format of which is extension-specific.
     #
     # Format:
@@ -241,7 +277,7 @@ CONFIGURATION
     # Examples:
     #LoadExtension = "extensions/sample.fdx";
     #LoadExtension = "extensions/sample.fdx":"conf/sample.conf";
-
+    
     # Extensions are named as follow:
     # dict_* for extensions that add content to the dictionary definitions.
     # dbg_*  for extensions useful only to retrieve more information on the framework execution.
@@ -249,8 +285,8 @@ CONFIGURATION
     # rt_*   : routing extensions that impact how messages are forwarded to other peers.
     # app_*  : applications, these extensions usually register callbacks to handle specific messages.
     # test_* : dummy extensions that are useful only in testing environments.
-
-
+    
+    
     # The dbg_msg_dump.fdx extension allows you to tweak the way freeDiameter displays some
     # information about some events. This extension does not actually use a configuration file
     # but receives directly a parameter in the string passed to the extension. Here are some examples:
@@ -264,16 +300,16 @@ CONFIGURATION
     #  2 - compact - display only a summary of the information
     #  4 - full    - display the complete information on a single long line
     #  8 - tree    - display the complete information in an easier to read format spanning several lines.
-
-
+    
+    
     ##############################################################
     ##  Peers configuration
-
+    
     #  The local server listens for incoming connections. By default,
     # all unknown connecting peers are rejected. Extensions can override this behavior (e.g., acl_wl).
-    # 
+    #
     #  In addition to incoming connections, the local peer can
-    # be configured to establish and maintain connections to some 
+    # be configured to establish and maintain connections to some
     # Diameter nodes and allow connections from these nodes.
     #  This is achieved with the ConnectPeer directive described below.
     #
@@ -295,7 +331,13 @@ CONFIGURATION
     # Examples:
     #ConnectPeer = "aaa.wide.ad.jp";
     #ConnectPeer = "old.diameter.serv" { TcTimer = 60; TLS_old_method; No_SCTP; Port=3868; } ;
-
-
+    
+    
     ##############################################################
-
+    ## General settings
+    
+    # If Route-Record AVPs should be added in Answers.
+    # Possible values: Always, Never
+    # Default: Always
+    #RouteRecordInAnswers = Never;
+    
